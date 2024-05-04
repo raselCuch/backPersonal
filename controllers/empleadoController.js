@@ -3,7 +3,6 @@ const Empleado = require("../models/empleado.js");
 exports.crearEmpleado = async (req, res) => {
   try {
     let empleado;
-
     empleado = new Empleado(req.body);
 
     await empleado.save();
@@ -33,6 +32,7 @@ exports.actualizarEmpleado = async (req, res) => {
     if (!empleado) {
       res.status(404).json({ msg: "No existe el empleado" });
     }
+    
     empleado.EmpDni = EmpDni;
     empleado.EmpNombre = EmpNombre;
     empleado.EmpApPaterno = EmpApPaterno;
