@@ -25,25 +25,43 @@ exports.obtenerEmpleados = async (req, res) => {
 
 exports.actualizarEmpleado = async (req, res) => {
   try {
-    const { EmpDni, EmpNombre, EmpApPaterno, EmpApMaterno, EmpFechNacimiento } =
-      req.body;
+    const {
+      EmpDni,
+      EmpNombre,
+      EmpApPaterno,
+      EmpApMaterno,
+      EmpGenero,
+      EmpArea,
+      EmpFechNacimiento,
+      EmpFechIngreso,
+      contrato,
+    } = req.body;
+
     let empleado = await Empleado.findById(req.params.id);
 
     if (!empleado) {
       res.status(404).json({ msg: "No existe el empleado" });
     }
-    
+
     empleado.EmpDni = EmpDni;
     empleado.EmpNombre = EmpNombre;
     empleado.EmpApPaterno = EmpApPaterno;
     empleado.EmpApMaterno = EmpApMaterno;
+    empleado.EmpGenero = EmpGenero;
+    empleado.EmpArea = EmpArea;
     empleado.EmpFechNacimiento = EmpFechNacimiento;
+    empleado.EmpFechIngreso = EmpFechIngreso;
 
-    empleado = await Empleado.findOneAndUpdate(
-      { _id: req.params.id },
-      empleado,
-      { new: true }
-    );
+    // Actualiza las propiedades del contrato
+    empleado.contrato.ContrModalidad = contrato.ContrModalidad;
+    empleado.contrato.ContrFechInicio = contrato.ContrFechInicio;
+    empleado.contrato.ContrFechFin = contrato.ContrFechFin;
+    empleado.contrato.ContrJornada = contrato.ContrJornada;
+    empleado.contrato.ContrSalario = contrato.ContrSalario;
+
+    // Guarda los cambios en la base de datos
+
+    empleado = await empleado.save();
 
     res.json(empleado);
   } catch (error) {

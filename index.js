@@ -9,6 +9,7 @@ conectarDB();
 app.use(express.json());
 
 app.use("/api/empleados", require("./routes/empleado.js"));
+app.use("/api/usuarios", require("./routes/usuario.js"));
 
 app.listen(4000, () => {
   console.log("Servidor corriendo bien");
