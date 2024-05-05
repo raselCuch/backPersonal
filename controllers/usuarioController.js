@@ -39,3 +39,34 @@ exports.eliminarUsuario = async (req, res) => {
     res.status(500).send("Hubo un error");
   }
 };
+
+exports.iniciarSesion = async (req, res) => {
+  const { UsuCorreo, UsuContrasena } = req.body;
+
+  try {
+    const usuario = await Usuario.findOne({ UsuCorreo });
+
+    if (usuario && usuario.UsuContrasena === UsuContrasena) {
+      if (usuario.UsuRol === "Administrador") {
+        res.json({
+          message: "Inicio de sesión exitoso como administrador",
+          // usuario,
+          isAdmin: true,
+        });
+      } else {
+        res.json({
+          message: "Inicio de sesión exitoso",
+          // usuario,
+          isAdmin: false,
+        });
+      }
+    } else {
+      res
+        .status(401)
+        .json({ message: "Correo electrónico o contraseña incorrectos" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Hubo un error");
+  }
+};
